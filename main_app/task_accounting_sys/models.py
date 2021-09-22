@@ -16,8 +16,7 @@ class Task(models.Model):
     name = models.CharField(max_length=100)
     description = models.CharField(max_length=200)
     create_date = models.DateTimeField(auto_now_add=True)
-    status = models.CharField(choices=TASK_STATUS, default='TODO',
-                              max_length=100)
+    status = models.IntegerField(choices=TASK_STATUS, default='1')
     priority = models.IntegerField(choices=PRIORITY)
 
     def __str__(self):
