@@ -1,4 +1,3 @@
-# from django.shortcuts import render
 from rest_framework.generics import get_object_or_404
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -27,8 +26,6 @@ class TaskView(APIView):
         saved_task = get_object_or_404(Task.objects.all(), pk=pk)
         data = request.data.get('tasks')
         serializer = TaskSerializer(instance=saved_task, data=data, partial=True)
-        # import pdb
-        # pdb.set_trace()
         if serializer.is_valid(raise_exception=True):
             task_saved = serializer.save()
         return Response({
@@ -36,7 +33,6 @@ class TaskView(APIView):
         })
 
     def delete(self, request, pk):
-        # Get object with this pk
         task = get_object_or_404(Task.objects.all(), pk=pk)
         task.delete()
         return Response({
