@@ -4,21 +4,14 @@ from .models import Task
 
 
 class TaskSerializer(serializers.Serializer):
-    TASK_STATUS = (
-        (1, 'TODO'), (2, 'READY'), (3, 'IN PROGRESS'),
-        (4, 'COMPLETED')
-    )
 
-    PRIORITY = (
-        (1, 'High'), (2, 'Med'), (3, 'Low')
-    )
-
-    id = serializers.IntegerField()
+    id = serializers.IntegerField(read_only=True)
     name = serializers.CharField(max_length=100)
     description = serializers.CharField(max_length=200)
-    create_date = serializers.DateTimeField()
+    create_date = serializers.CharField(read_only=True)
     status = serializers.IntegerField()
     priority = serializers.IntegerField()
 
     def create(self, validated_data):
         return Task.objects.create(**validated_data)
+
