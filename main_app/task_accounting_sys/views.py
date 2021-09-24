@@ -7,11 +7,17 @@ from .serializers import TaskSerializer
 
 # Create your views here.
 
+FILTERS = [
+    'id', 'status', 'priority', 'create_date'
+]
+
 
 class TaskView(APIView):
 
-    def get(self, request):
-        tasks = Task.objects.all()
+    def get(self, request, val='id'):
+        if val not in FILTERS:
+            raise Exception
+        tasks = Task.objects.filter().order_by(f"{val}")
         serializer = TaskSerializer(tasks, many=True)
         return Response({"tasks": serializer.data})
 
