@@ -2,16 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="17a244f6-c11f-4b8e-b004-7f17e400395e" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/main_app/authentication/migrations/0001_initial.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main_app/authentication/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/main_app/authentication/serializers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main_app/authentication/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/main_app/authentication/views.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main_app/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/main_app/db.sqlite3" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main_app/main_app/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/main_app/main_app/settings.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main_app/main_app/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/main_app/main_app/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main_app/task_accounting_sys/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/main_app/task_accounting_sys/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main_app/task_accounting_sys/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/main_app/task_accounting_sys/views.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

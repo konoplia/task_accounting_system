@@ -8,9 +8,15 @@ from rest_framework.exceptions import AuthenticationFailed
 
 class RegisterView(APIView):
 
+    def get(self, request):
+        users = User.objects.all()
+        serializer = UserSerializer(users, many=True)
+        return Response({"users": serializer.data})
+
     def post(self, request):
         single_user = request.data.get('users')
         serializer = UserSerializer(data=single_user)
+        print('2')
         if serializer.is_valid(raise_exception=True):
             user_saved = serializer.save()
         return Response({"success": "User '{}' created successfully".format(user_saved.name)})
