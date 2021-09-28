@@ -15,6 +15,8 @@ FILTERS = [
 class TaskView(APIView):
 
     def get(self, request, val='id'):
+        import pdb
+        pdb.set_trace()
         if val not in FILTERS:
             raise Exception
         tasks = Task.objects.filter().order_by(f"{val}")
