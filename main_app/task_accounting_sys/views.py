@@ -1,6 +1,7 @@
 from rest_framework.generics import get_object_or_404
 from rest_framework.response import Response
-from rest_framework.views import APIView
+from rest_framework.generics import ListAPIView
+from rest_framework import filters
 
 from .models import Task
 from .serializers import TaskSerializer
@@ -12,15 +13,12 @@ FILTERS = [
 ]
 
 
-class TaskView(APIView):
+class TaskView(ListAPIView):
 
-    def get(self, request, val='id'):
-        print(request.user)
-        if val not in FILTERS:
-            raise Exception
-        tasks = Task.objects.filter().order_by(f"{val}")
-        serializer = TaskSerializer(tasks, many=True)
-        return Response({"tasks": serializer.data})
+    queryset = Task.objects.all()
+    serializer_class = TaskSerializer
+    filter_backends = [filters.OrderingFilter]
+    ordering_fields = ['id', 'status', 'priority', 'create_date']
 
     def post(self, request):
         task = request.data.get('tasks')
