@@ -1,36 +1,45 @@
+from rest_framework.exceptions import AuthenticationFailed
+from rest_framework_simplejwt.views import TokenObtainPairView
+from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from .serializers import UserSerializer
+from .serializers import CustomUserSerializer
+from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework.permissions import AllowAny
 from .models import NewUser
-from rest_framework.exceptions import AuthenticationFailed
-# Create your views here.
 
 
-class RegisterView(APIView):
+class CustomUserCreate(APIView):
+    permission_classes = [AllowAny]
 
-    def get(self, request):
-        users = NewUser.objects.all()
-        serializer = UserSerializer(users, many=True)
-        return Response({"users": serializer.data})
+    # def post(self, request, format='json'):
+    #     serializer = CustomUserSerializer(data=request.data)
+    #     if serializer.is_valid():
+    #         user = serializer.save()
+    #         if user:
+    #             json = serializer.data
+    #             return Response(json, status=status.HTTP_201_CREATED)
+    #     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def post(self, request):
-        single_user = request.data.get('users')
-        serializer = UserSerializer(data=single_user)
-        if serializer.is_valid(raise_exception=True):
-            user_saved = serializer.save()
-        return Response({"success": "User '{}' created successfully".format(user_saved.user_name)})
+        serializer = CustomUserSerializer(data=request.data)
+        if serializer.is_valid():
+            user = serializer.save()
+            if user:
+                saved_user = serializer.data
+                return Response({"success": "User '{}' created successfully".format(saved_user['user_name'])}, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class LoginView(APIView):
+class BlacklistTokenUpdateView(APIView):
+    permission_classes = [AllowAny]
+    authentication_classes = ()
+
     def post(self, request):
-        email = request.data['email']
-        password = request.data['password']
-
-        user = NewUser.objects.filter(email=email).first()
-        if user is None:
-            raise AuthenticationFailed('User not found!')
-
-        if not user.check_password(password):
-            raise AuthenticationFailed('Incorrect password!')
-
-        return Response({"success": 'User logs in!'})
+        try:
+            refresh_token = request.data["refresh_token"]
+            token = RefreshToken(refresh_token)
+            token.blacklist()
+            return Response(status=status.HTTP_205_RESET_CONTENT)
+        except Exception as e:
+            return Response(status=status.HTTP_400_BAD_REQUEST)

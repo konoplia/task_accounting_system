@@ -15,6 +15,7 @@ FILTERS = [
 class TaskView(APIView):
 
     def get(self, request, val='id'):
+        print(request.user)
         if val not in FILTERS:
             raise Exception
         tasks = Task.objects.filter().order_by(f"{val}")

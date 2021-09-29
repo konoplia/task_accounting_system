@@ -1,8 +1,9 @@
-from django.urls import path, include
-from .views import RegisterView, LoginView
+from django.urls import path
+from .views import CustomUserCreate, BlacklistTokenUpdateView
+
+app_name = 'users'
 
 urlpatterns = [
-    path('', RegisterView.as_view()),
-    path('login', LoginView.as_view()),
-
+    path('create/', CustomUserCreate.as_view(), name="create_user"),
+    path('logout/blacklist/', BlacklistTokenUpdateView.as_view(), name='blacklist')
 ]
