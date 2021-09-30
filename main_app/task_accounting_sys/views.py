@@ -21,7 +21,10 @@ class TaskView(ListAPIView):
     ordering_fields = ['id', 'status', 'priority', 'create_date']
 
     def post(self, request):
+        # print(request.user.id)
         task = request.data.get('tasks')
+        # import pdb
+        # pdb.set_trace()
         serializer = TaskSerializer(data=task)
         if serializer.is_valid(raise_exception=True):
             task_saved = serializer.save()

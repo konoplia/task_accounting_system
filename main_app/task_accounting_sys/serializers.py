@@ -11,8 +11,11 @@ class TaskSerializer(serializers.Serializer):
     create_date = serializers.CharField(read_only=True)
     status = serializers.IntegerField()
     priority = serializers.IntegerField()
+    create_by = serializers.CharField(read_only=True)
 
     def create(self, validated_data):
+        import pdb
+        pdb.set_trace()
         return Task.objects.create(**validated_data)
 
     def update(self, instance, validated_data):
