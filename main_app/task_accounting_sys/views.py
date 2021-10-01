@@ -1,10 +1,13 @@
 from rest_framework.generics import get_object_or_404
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.generics import ListAPIView
 from rest_framework import filters
 
 from .models import Task
 from .serializers import TaskSerializer
+
+from .permissions import IsOwnerOrReadOnly
 
 # Create your views here.
 
@@ -19,14 +22,17 @@ class TaskView(ListAPIView):
     serializer_class = TaskSerializer
     filter_backends = [filters.OrderingFilter]
     ordering_fields = ['id', 'status', 'priority', 'create_date']
+    permission_classes = (IsOwnerOrReadOnly,)
 
     def post(self, request):
-        # print(request.user.id)
         task = request.data.get('tasks')
-        # import pdb
-        # pdb.set_trace()
+        task['created_by'] = request.user.id
+        print(task, 'before')
         serializer = TaskSerializer(data=task)
+        print(task, '3')
         if serializer.is_valid(raise_exception=True):
+            # import pdb
+            # pdb.set_trace()
             task_saved = serializer.save()
         return Response({"success": "Task '{}' created successfully".format(task_saved.name)})
 
