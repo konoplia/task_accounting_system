@@ -1,22 +1,32 @@
+from django.shortcuts import render
 from rest_framework import status
+from rest_framework.generics import CreateAPIView, ListAPIView
+from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from .serializers import CustomUserSerializer
 from rest_framework_simplejwt.tokens import RefreshToken
-from rest_framework.permissions import AllowAny
+
+from .serializers import CustomUserSerializer
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
+
+# Create your views here.
 
 
-class CustomUserCreate(APIView):
-    permission_classes = [AllowAny]
+class CustomUserView(ListAPIView, CreateAPIView):
+
+    queryset = User.objects.all()
+    serializer_class = CustomUserSerializer
 
     def post(self, request):
-        serializer = CustomUserSerializer(data=request.data)
-        if serializer.is_valid():
-            user = serializer.save()
-            if user:
-                saved_user = serializer.data
-                return Response({"success": "User '{}' created successfully".format(saved_user['user_name'])}, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        user_data = request.data
+        print(request)
+        serializer = CustomUserSerializer(data=user_data)
+        if serializer.is_valid(raise_exception=True):
+            user_data_saved = serializer.save()
+        return Response({"success": "Task '{}' created successfully".format(
+            user_data_saved.username)})
 
 
 class BlacklistTokenUpdateView(APIView):
