@@ -22,10 +22,10 @@ class TaskView(ListAPIView):
     serializer_class = TaskSerializer
     filter_backends = [filters.OrderingFilter]
     ordering_fields = ['id', 'status', 'priority', 'create_date']
-    permission_classes = (IsOwnerOrReadOnly,)
+    permission_classes = (IsAuthenticated, IsOwnerOrReadOnly,)
 
     def post(self, request):
-        task = request.data.get('tasks')
+        task = request.data
         task['created_by'] = request.user.id
         print(task, 'before')
         serializer = TaskSerializer(data=task)

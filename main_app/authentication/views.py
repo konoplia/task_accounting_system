@@ -25,7 +25,7 @@ class CustomUserView(ListAPIView, CreateAPIView):
         serializer = CustomUserSerializer(data=user_data)
         if serializer.is_valid(raise_exception=True):
             user_data_saved = serializer.save()
-        return Response({"success": "Task '{}' created successfully".format(
+        return Response({"success": "User '{}' created successfully".format(
             user_data_saved.username)})
 
 
