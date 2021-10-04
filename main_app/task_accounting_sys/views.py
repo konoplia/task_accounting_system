@@ -1,7 +1,7 @@
 from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from rest_framework.generics import ListAPIView
+from rest_framework.generics import ListAPIView, CreateAPIView, RetrieveUpdateAPIView, DestroyAPIView
 from rest_framework import filters
 
 from .models import Task
@@ -16,27 +16,37 @@ FILTERS = [
 ]
 
 
-class TaskView(ListAPIView):
+class TaskListView(ListAPIView):
 
     queryset = Task.objects.all()
     serializer_class = TaskSerializer
     filter_backends = [filters.OrderingFilter]
     ordering_fields = ['id', 'status', 'priority', 'create_date']
-    permission_classes = (IsAuthenticated, IsOwnerOrReadOnly,)
+
+
+class TaskCreateView(CreateAPIView):
+
+    serializer_class = TaskSerializer
 
     def post(self, request):
         task = request.data
         task['created_by'] = request.user.id
-        print(task, 'before')
         serializer = TaskSerializer(data=task)
-        print(task, '3')
         if serializer.is_valid(raise_exception=True):
-            # import pdb
-            # pdb.set_trace()
             task_saved = serializer.save()
         return Response({"success": "Task '{}' created successfully".format(task_saved.name)})
 
+
+class TaskUpdateView(RetrieveUpdateAPIView):
+
+    serializer_class = TaskSerializer
+    permission_classes = [IsOwnerOrReadOnly]
+
     def put(self, request, pk):
+
+        obj = Task.objects.get(id=pk)
+        self.check_object_permissions(request, obj)
+
         saved_task = get_object_or_404(Task.objects.all(), pk=pk)
         data = request.data.get('tasks')
         serializer = TaskSerializer(instance=saved_task, data=data, partial=True)
@@ -46,7 +56,16 @@ class TaskView(ListAPIView):
             "success": "Task '{}' updated successfully".format(task_saved.name)
         })
 
+
+class TaskDeleteView(DestroyAPIView):
+
+    serializer_class = TaskSerializer
+    permission_classes = [IsOwnerOrReadOnly]
+
     def delete(self, request, pk):
+        obj = Task.objects.get(id=pk)
+        self.check_object_permissions(request, obj)
+
         task = get_object_or_404(Task.objects.all(), pk=pk)
         task.delete()
         return Response({
