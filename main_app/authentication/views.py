@@ -21,7 +21,6 @@ class CustomUserView(ListAPIView, CreateAPIView):
 
     def post(self, request):
         user_data = request.data
-        print(request)
         serializer = CustomUserSerializer(data=user_data)
         if serializer.is_valid(raise_exception=True):
             user_data_saved = serializer.save()
@@ -30,8 +29,8 @@ class CustomUserView(ListAPIView, CreateAPIView):
 
 
 class BlacklistTokenUpdateView(APIView):
+
     permission_classes = [AllowAny]
-    authentication_classes = ()
 
     def post(self, request):
         try:

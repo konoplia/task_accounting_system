@@ -24,5 +24,6 @@ urlpatterns = [
     path('api/', include('task_accounting_sys.urls')),
     path('api/authentication/', include('authentication.urls')),
     path('api/token/', TokenObtainPairView.as_view()),
-    path('api/token/refresh/', TokenRefreshView.as_view())
+    path('api/token/refresh/', TokenRefreshView.as_view()),
+    # path('accounts/', include('django.contrib.auth.urls')),
 ]
