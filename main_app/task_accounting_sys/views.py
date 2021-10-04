@@ -7,7 +7,7 @@ from rest_framework import filters
 from .models import Task
 from .serializers import TaskSerializer
 
-from .permissions import IsOwnerOrReadOnly
+from .permissions import IsOwner, IsManagersGroupMemberOrExecutor
 
 # Create your views here.
 
@@ -27,6 +27,7 @@ class TaskListView(ListAPIView):
 class TaskCreateView(CreateAPIView):
 
     serializer_class = TaskSerializer
+    permission_classes = (IsManagersGroupMemberOrExecutor, )
 
     def post(self, request):
         task = request.data
@@ -40,7 +41,7 @@ class TaskCreateView(CreateAPIView):
 class TaskUpdateView(RetrieveUpdateAPIView):
 
     serializer_class = TaskSerializer
-    permission_classes = [IsOwnerOrReadOnly]
+    permission_classes = (IsManagersGroupMemberOrExecutor, IsOwner)
 
     def put(self, request, pk):
 
@@ -48,7 +49,7 @@ class TaskUpdateView(RetrieveUpdateAPIView):
         self.check_object_permissions(request, obj)
 
         saved_task = get_object_or_404(Task.objects.all(), pk=pk)
-        data = request.data.get('tasks')
+        data = request.data
         serializer = TaskSerializer(instance=saved_task, data=data, partial=True)
         if serializer.is_valid(raise_exception=True):
             task_saved = serializer.save()
@@ -60,7 +61,7 @@ class TaskUpdateView(RetrieveUpdateAPIView):
 class TaskDeleteView(DestroyAPIView):
 
     serializer_class = TaskSerializer
-    permission_classes = [IsOwnerOrReadOnly]
+    permission_classes = (IsOwner, )
 
     def delete(self, request, pk):
         obj = Task.objects.get(id=pk)

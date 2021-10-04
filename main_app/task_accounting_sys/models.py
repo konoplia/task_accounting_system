@@ -12,6 +12,7 @@ class Task(models.Model):
     priority = models.IntegerField(default='1')
     created_by = models.ForeignKey(User, on_delete=models.DO_NOTHING,
                                    auto_created=True)
+    executor = models.IntegerField()
 
     def __str__(self):
         return self.name
