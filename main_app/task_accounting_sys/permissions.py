@@ -8,8 +8,6 @@ class IsOwner(permissions.BasePermission):
 
 class IsManagersGroupMemberOrExecutor(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
-        # import pdb
-        # pdb.set_trace()
         if request.user.groups.filter(name='Managers').exists() or request.user.id == obj.executor:
             return True
         return False
