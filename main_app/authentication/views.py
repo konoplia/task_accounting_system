@@ -19,6 +19,11 @@ class CustomUserView(ListAPIView, CreateAPIView):
     queryset = User.objects.all()
     serializer_class = CustomUserSerializer
 
+    # def get(self, request):
+    #     return Response ({User.objects.all()
+    # def get(self, request, *args, **kwargs):
+    #     return self.list(request, *args, **kwargs)
+
     def post(self, request):
         user_data = request.data
         serializer = CustomUserSerializer(data=user_data)

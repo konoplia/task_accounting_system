@@ -11,3 +11,10 @@ class IsManagersGroupMemberOrExecutor(permissions.BasePermission):
         if request.user.groups.filter(name='Managers').exists() or request.user.id == obj.executor:
             return True
         return False
+
+
+class IsManagersGroupMember(permissions.BasePermission):
+    def has_permission(self, request, view):
+        if request.user.groups.filter(name='Managers').exists():
+            return True
+        return False

@@ -1,5 +1,4 @@
 from rest_framework.generics import get_object_or_404
-from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.generics import ListAPIView, CreateAPIView, RetrieveUpdateAPIView, DestroyAPIView
 from rest_framework import filters
@@ -7,13 +6,9 @@ from rest_framework import filters
 from .models import Task
 from .serializers import TaskSerializer
 
-from .permissions import IsOwner, IsManagersGroupMemberOrExecutor
+from .permissions import IsOwner, IsManagersGroupMemberOrExecutor, IsManagersGroupMember
 
 # Create your views here.
-
-FILTERS = [
-    'id', 'status', 'priority', 'create_date'
-]
 
 
 class TaskListView(ListAPIView):
@@ -27,7 +22,7 @@ class TaskListView(ListAPIView):
 class TaskCreateView(CreateAPIView):
 
     serializer_class = TaskSerializer
-    permission_classes = (IsManagersGroupMemberOrExecutor, )
+    permission_classes = (IsManagersGroupMember, )
 
     def post(self, request):
         task = request.data
