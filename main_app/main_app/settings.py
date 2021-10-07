@@ -44,6 +44,9 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_simplejwt.token_blacklist',
 
+    'django_celery_beat',
+    'django_celery_results',
+
     'main_app',
     'authentication',
     'task_accounting_sys',
@@ -180,9 +183,3 @@ CELERY_RESULT_BACKEND = 'redis://localhost:6379'
 CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
-CELERY_BEAT_SCHEDULE = {
-    'call-func': {
-        'task': 'task_accounting_sys.tasks.func',
-        'schedule': 10.0,
-    },
-}

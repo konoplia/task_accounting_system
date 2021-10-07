@@ -1,6 +1,7 @@
 import os
 
 from celery import Celery
+from celery import shared_task
 from celery.schedules import crontab
 
 # Set the default Django settings module for the 'celery' program.
@@ -11,22 +12,10 @@ app.config_from_object('django.conf:settings', namespace='CELERY')
 app.autodiscover_tasks()
 
 
-@app.on_after_configure.connect
-def setup_periodic_tasks(sender, **kwargs):
-    # Calls test('hello') every 10 seconds.
-    sender.add_periodic_task(10.0, test.s('hello'), name='add every 10')
-
-
-@app.task
-def test(arg):
-    print(arg)
-
-
-# app.conf.beat_schedule = {
-#     'add-every-30-seconds': {
-#         'task': 'tasks.add',
-#         'schedule': 30.0,
-#         'args': (16, 16)
-#     },
-# }
+app.conf.beat_schedule = {
+    'add-every-30-seconds': {
+        'task': 'task_accounting_sys.tasks.delete_exp_task',
+        'schedule': 20.0,
+    },
+}
 app.conf.timezone = 'UTC'
