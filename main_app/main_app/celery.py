@@ -13,9 +13,9 @@ app.autodiscover_tasks()
 
 
 app.conf.beat_schedule = {
-    'add-every-30-seconds': {
+    'check-every-12-hours': {
         'task': 'task_accounting_sys.tasks.delete_exp_task',
-        'schedule': 20.0,
+        'schedule': crontab(hour=12),
     },
 }
 app.conf.timezone = 'UTC'
