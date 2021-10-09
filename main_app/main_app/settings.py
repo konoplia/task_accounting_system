@@ -15,7 +15,7 @@ from datetime import timedelta
 # from django.contrib.auth.models import User
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-import django.contrib.auth.apps
+
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
