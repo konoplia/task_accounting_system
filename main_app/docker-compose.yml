@@ -1,0 +1,45 @@
+version: "3"
+
+services:
+  db:
+    image: postgres:10.1-alpine
+    volumes:
+      - dbdata:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+
+  web:
+    build: .
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/code
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+  redis:
+    image: redis
+    depends_on:
+      - web
+      - db
+  celery-beat:
+    build: .
+    command: celery -A main_app beat
+    volumes:
+      - .:/code
+    depends_on:
+      - web
+      - redis
+  celery:
+    build: .
+    command: celery -A main_app worker -l info
+    volumes:
+      - .:/code
+    depends_on:
+      - web
+      - redis
+
+volumes:
+  dbdata:
