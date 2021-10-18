@@ -1,3 +1,4 @@
+import logging
 from rest_framework.generics import get_object_or_404
 from rest_framework.response import Response
 from rest_framework.generics import ListAPIView, CreateAPIView, RetrieveUpdateAPIView, DestroyAPIView
@@ -9,6 +10,7 @@ from .serializers import TaskSerializer
 from .permissions import IsOwner, IsManagersGroupMemberOrExecutor, IsManagersGroupMember
 
 # Create your views here.
+logger = logging.getLogger('debug')
 
 
 class TaskListView(ListAPIView):
@@ -25,6 +27,7 @@ class TaskCreateView(CreateAPIView):
     permission_classes = (IsManagersGroupMember, )
 
     def post(self, request):
+        logger.debug(request.data)
         task = request.data
         task['created_by'] = request.user.id
         serializer = TaskSerializer(data=task)
