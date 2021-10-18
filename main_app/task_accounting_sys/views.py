@@ -36,7 +36,7 @@ class TaskCreateView(CreateAPIView):
 class TaskUpdateView(RetrieveUpdateAPIView):
 
     serializer_class = TaskSerializer
-    permission_classes = (IsManagersGroupMemberOrExecutor, IsOwner)
+    permission_classes = (IsManagersGroupMemberOrExecutor,)
 
     def put(self, request, pk):
 
