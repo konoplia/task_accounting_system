@@ -1,16 +1,16 @@
 import logging
 from rest_framework.generics import get_object_or_404
 from rest_framework.response import Response
-from rest_framework.generics import ListAPIView, CreateAPIView, RetrieveUpdateAPIView, DestroyAPIView
+from rest_framework.generics import ListAPIView, CreateAPIView, UpdateAPIView, DestroyAPIView
 from rest_framework import filters
 
 from .models import Task
-from .serializers import TaskSerializer
+from .serializers import TaskSerializer, TaskUpdateSerializer
 
 from .permissions import IsOwner, IsManagersGroupMemberOrExecutor, IsManagersGroupMember
 
 # Create your views here.
-logger = logging.getLogger('debug')
+# logger = logging.getLogger('debug')
 
 
 class TaskListView(ListAPIView):
@@ -27,7 +27,7 @@ class TaskCreateView(CreateAPIView):
     permission_classes = (IsManagersGroupMember, )
 
     def post(self, request):
-        logger.debug(request.data)
+        # logger.debug(request.data)
         task = request.data
         task['created_by'] = request.user.id
         serializer = TaskSerializer(data=task)
@@ -36,9 +36,10 @@ class TaskCreateView(CreateAPIView):
         return Response({"success": "Task '{}' created successfully".format(task_saved.name)})
 
 
-class TaskUpdateView(RetrieveUpdateAPIView):
+class TaskUpdateView(UpdateAPIView):
 
-    serializer_class = TaskSerializer
+    # serializer_class = TaskSerializer
+    serializer_class = TaskUpdateSerializer
     permission_classes = (IsManagersGroupMemberOrExecutor,)
 
     def put(self, request, pk):
@@ -48,7 +49,9 @@ class TaskUpdateView(RetrieveUpdateAPIView):
 
         saved_task = get_object_or_404(Task.objects.all(), pk=pk)
         data = request.data
-        serializer = TaskSerializer(instance=saved_task, data=data, partial=True)
+        # if request.user.groups.filter(name='Managers').exists():
+        print(data)
+        serializer = TaskUpdateSerializer(instance=saved_task, data=data, partial=True)
         if serializer.is_valid(raise_exception=True):
             task_saved = serializer.save()
         return Response({

@@ -16,46 +16,51 @@ from datetime import timedelta
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'formatters': {
-            'my_formatter': {
-                'format': '{levelname} {asctime} {module} {process:d} {thread:d} {message}',
-                'style': '{',
-            },
-            'simple': {
-                'format': '{levelname} {message} {module}',
-                'style': '{',
-            },
-        },
-    'handlers': {
-        'file': {
-            'level': 'WARNING',
-            'class': 'logging.FileHandler',
-            'formatter': 'my_formatter',
-            'filename': './logs/warning.log',
-        },
-        'debug': {
-            'level': 'DEBUG',
-            'class': 'logging.FileHandler',
-            'formatter': 'simple',
-            'filename': './logs/debug.log',
-        }
-    },
-    'loggers': {
-        'django': {
-            'handlers': ['file'],
-            'level': 'WARNING',
-            'propagate': True,
-        },
-        'debug': {
-            'handlers': ['debug'],
-            'level': 'DEBUG',
-            'propagate': True,
-        }
-    },
-}
+# LOGGING = {
+#     'version': 1,
+#     'disable_existing_loggers': False,
+#     'formatters': {
+#             'my_formatter': {
+#                 'format': '{levelname} {asctime} {module} {process:d} {thread:d} {message}',
+#                 'style': '{',
+#             },
+#             'simple': {
+#                 'format': '{levelname} {message} {module}',
+#                 'style': '{',
+#             },
+#         },
+#     'handlers': {
+#         'file': {
+#             'level': 'INFO',
+#             'class': 'logging.FileHandler',
+#             'formatter': 'my_formatter',
+#             'filename': './logs/warning.log',
+#         },
+#         'debug': {
+#             'level': 'DEBUG',
+#             'class': 'logging.FileHandler',
+#             'formatter': 'simple',
+#             'filename': './logs/debug.log',
+#         }
+#     },
+#     'loggers': {
+#         'django': {
+#             'handlers': ['file'],
+#             'level': 'WARNING',
+#             'propagate': True,
+#         },
+#         'debug': {
+#             'handlers': ['debug'],
+#             'level': 'DEBUG',
+#             'propagate': True,
+#         },
+#         'info': {
+#             'handlers': ['file'],
+#             'level': 'INFO',
+#             'propagate': True,
+#         }
+#     },
+# }
 
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
