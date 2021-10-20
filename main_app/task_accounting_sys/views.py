@@ -24,8 +24,8 @@ class TaskView(APIView):
 
     def put(self, request, pk):
         saved_task = get_object_or_404(Task.objects.all(), pk=pk)
-        data = request.data.get('tasks')
-        serializer = TaskSerializer(instance=saved_task, data=data, partial=True)
+        data = request.data
+        serializer = TaskSerializer(instance=saved_task, data=data)
         if serializer.is_valid(raise_exception=True):
             task_saved = serializer.save()
         return Response({
