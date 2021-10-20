@@ -9,6 +9,9 @@ logger_debug = logging.getLogger('debug')
 
 class TaskSerializer(serializers.ModelSerializer):
 
+    status = serializers.CharField(max_length=100)
+    priority = serializers.CharField(max_length=100)
+
     class Meta:
         model = Task
         fields = '__all__'
@@ -29,5 +32,6 @@ class TaskManagerSerializer(serializers.ModelSerializer):
         model = Task
         fields = [
             'status',
-            'description'
+            'description',
+            'executor'
         ]
