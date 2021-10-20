@@ -13,20 +13,21 @@ class TaskSerializer(serializers.ModelSerializer):
         model = Task
         fields = '__all__'
 
-    # def update(self, instance, validated_data):
-    #     logger_debug.debug(instance)
-    #     logger.info(instance)
-    #     instance.description = validated_data.get('description', instance.description)
-    #     instance.status = validated_data.get('status', instance.status)
-    #     instance.save()
-    #     return instance
 
-
-class TaskUpdateSerializer(serializers.ModelSerializer):
+class TaskDeveloperSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Task
         fields = [
-            'description',
             'status'
+        ]
+
+
+class TaskManagerSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Task
+        fields = [
+            'status',
+            'description'
         ]

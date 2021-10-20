@@ -1,13 +1,13 @@
 import logging
 from rest_framework.generics import get_object_or_404
 from rest_framework.response import Response
-from rest_framework.generics import ListAPIView, CreateAPIView, UpdateAPIView, DestroyAPIView
+from rest_framework.generics import ListAPIView, CreateAPIView, RetrieveUpdateAPIView, DestroyAPIView
 from rest_framework import filters
 
 from .models import Task
-from .serializers import TaskSerializer, TaskUpdateSerializer
+from .serializers import TaskSerializer, TaskDeveloperSerializer, TaskManagerSerializer
 
-from .permissions import IsOwner, IsManagersGroupMemberOrExecutor, IsManagersGroupMember
+from .permissions import IsOwner, IsManagersGroupMemberAndOwnerOrExecutor, IsManagersGroupMember
 
 # Create your views here.
 # logger = logging.getLogger('debug')
@@ -19,6 +19,7 @@ class TaskListView(ListAPIView):
     serializer_class = TaskSerializer
     filter_backends = [filters.OrderingFilter]
     ordering_fields = ['id', 'status', 'priority', 'create_date']
+    ordering = ['id']
 
 
 class TaskCreateView(CreateAPIView):
@@ -36,22 +37,24 @@ class TaskCreateView(CreateAPIView):
         return Response({"success": "Task '{}' created successfully".format(task_saved.name)})
 
 
-class TaskUpdateView(UpdateAPIView):
+class TaskUpdateView(RetrieveUpdateAPIView):
 
-    # serializer_class = TaskSerializer
-    serializer_class = TaskUpdateSerializer
-    permission_classes = (IsManagersGroupMemberOrExecutor,)
+    serializer_class = TaskSerializer
+    permission_classes = (IsManagersGroupMemberAndOwnerOrExecutor,)
 
     def put(self, request, pk):
 
         obj = Task.objects.get(id=pk)
         self.check_object_permissions(request, obj)
 
-        saved_task = get_object_or_404(Task.objects.all(), pk=pk)
         data = request.data
-        # if request.user.groups.filter(name='Managers').exists():
-        print(data)
-        serializer = TaskUpdateSerializer(instance=saved_task, data=data, partial=True)
+        saved_task = get_object_or_404(Task.objects.all(), pk=pk)
+
+        if request.user.groups.filter(name='Managers').exists():
+            serializer = TaskManagerSerializer(instance=saved_task, data=data, partial=True)
+        else:
+            serializer = TaskSerializer(instance=saved_task, data=data, partial=True)
+
         if serializer.is_valid(raise_exception=True):
             task_saved = serializer.save()
         return Response({
