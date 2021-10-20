@@ -9,8 +9,8 @@ class TaskSerializer(serializers.Serializer):
     name = serializers.CharField(max_length=100)
     description = serializers.CharField(max_length=200)
     create_date = serializers.CharField(read_only=True)
-    status = serializers.IntegerField()
-    priority = serializers.IntegerField()
+    status = serializers.CharField(max_length=200)
+    priority = serializers.CharField(max_length=200)
 
     def create(self, validated_data):
         return Task.objects.create(**validated_data)
