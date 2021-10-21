@@ -2,19 +2,22 @@ from django.db import models
 from django.contrib.auth.models import User
 
 
-STATUS = (
-    (1, 'TO DO'),
-    (2, 'READY'),
-    (3, 'IN PROGRESS'),
-    (4, 'COMPLETED')
+TO_DO = 1
+READY = 2
+IN_PROGRESS = 3
+COMPLETED = 4
+STATUS_CHOICES = (
+    (TO_DO, 'TO_DO'),
+    (READY, "READY"),
+    (IN_PROGRESS, 'IN_PROGRESS'),
+    (COMPLETED, 'COMPLETED')
 )
 
-PRIORITY = [
-    (1, "HIGH"),
-    (2, "NORMAL"),
-    (3, "LOW"),
-
-]
+PRIORITY_CHOICES = (
+    (3, 'Low'),
+    (2, 'Normal'),
+    (1, 'High'),
+)
 
 
 class Task(models.Model):
@@ -23,11 +26,12 @@ class Task(models.Model):
     name = models.CharField(max_length=100)
     description = models.CharField(max_length=200)
     create_date = models.DateTimeField(auto_now_add=True)
-    status = models.IntegerField(choices=STATUS, default='1')
-    priority = models.IntegerField(choices=PRIORITY, default='1')
+    status = models.IntegerField(choices=STATUS_CHOICES, default=1)
+    priority = models.IntegerField(choices=PRIORITY_CHOICES, default=1)
+    # priority = models.PositiveSmallIntegerField(choices=PriorityChoices)
     created_by = models.ForeignKey(User, on_delete=models.DO_NOTHING,
                                    auto_created=True)
-    executor = models.IntegerField(blank=True)
+    executor = models.PositiveIntegerField(blank=True, null=True)
 
     def __str__(self):
         return self.name

@@ -31,7 +31,8 @@ class TaskCreateView(CreateAPIView):
         # logger.debug(request.data)
         task = request.data
         task['created_by'] = request.user.id
-        serializer = TaskSerializer(data=task)
+        serializer = TaskSerializer(data=task, context=request.user.id)
+
         if serializer.is_valid(raise_exception=True):
             task_saved = serializer.save()
         return Response({"success": "Task '{}' created successfully".format(task_saved.name)})
@@ -51,12 +52,13 @@ class TaskUpdateView(RetrieveUpdateAPIView):
         saved_task = get_object_or_404(Task.objects.all(), pk=pk)
 
         if request.user.groups.filter(name='Managers').exists():
-            serializer = TaskManagerSerializer(instance=saved_task, data=data, partial=True)
+            serializer = TaskManagerSerializer(instance=saved_task, data=data, context=request.user.id, partial=True)
         else:
-            serializer = TaskSerializer(instance=saved_task, data=data, partial=True)
+            serializer = TaskDeveloperSerializer(instance=saved_task, data=data)
 
         if serializer.is_valid(raise_exception=True):
             task_saved = serializer.save()
+
         return Response({
             "success": "Task '{}' updated successfully".format(task_saved.name)
         })

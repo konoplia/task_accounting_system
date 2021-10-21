@@ -8,7 +8,7 @@ class IsOwner(permissions.BasePermission):
 
 class IsManagersGroupMemberAndOwnerOrExecutor(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
-        if (request.user.groups.filter(name='Managers').exists() and request.user.id == obj.created_by)\
+        if (request.user.groups.filter(name='Managers').exists() and request.user.id == obj.created_by.id)\
                 or request.user.id == obj.executor:
             return True
         return False
