@@ -14,6 +14,13 @@ class TaskSerializer(serializers.ModelSerializer):
         model = Task
         fields = '__all__'
 
+    def validate(self, data):
+        fields = [x for x in self.get_fields().keys()]
+        for key in self.initial_data.keys():
+            if key not in fields:
+                raise serializers.ValidationError(f'field "{key}" dosen`t exist')
+        return data
+
     def validate_executor(self, value):
         if value == self.context:
             raise serializers.ValidationError("you cannot assign the task to yourself")
