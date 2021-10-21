@@ -16,51 +16,42 @@ from datetime import timedelta
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 
-# LOGGING = {
-#     'version': 1,
-#     'disable_existing_loggers': False,
-#     'formatters': {
-#             'my_formatter': {
-#                 'format': '{levelname} {asctime} {module} {process:d} {thread:d} {message}',
-#                 'style': '{',
-#             },
-#             'simple': {
-#                 'format': '{levelname} {message} {module}',
-#                 'style': '{',
-#             },
-#         },
-#     'handlers': {
-#         'file': {
-#             'level': 'INFO',
-#             'class': 'logging.FileHandler',
-#             'formatter': 'my_formatter',
-#             'filename': './logs/warning.log',
-#         },
-#         'debug': {
-#             'level': 'DEBUG',
-#             'class': 'logging.FileHandler',
-#             'formatter': 'simple',
-#             'filename': './logs/debug.log',
-#         }
-#     },
-#     'loggers': {
-#         'django': {
-#             'handlers': ['file'],
-#             'level': 'WARNING',
-#             'propagate': True,
-#         },
-#         'debug': {
-#             'handlers': ['debug'],
-#             'level': 'DEBUG',
-#             'propagate': True,
-#         },
-#         'info': {
-#             'handlers': ['file'],
-#             'level': 'INFO',
-#             'propagate': True,
-#         }
-#     },
-# }
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+            'verbose': {
+                'format': '{levelname} {asctime} {module} {process:d} {thread:d} {message}',
+                'style': '{',
+            }
+    },
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+        'file': {
+            'level': 'ERROR',
+            'class': 'logging.FileHandler',
+            'filename': './logs/error.log',
+        },
+    },
+    'root': {
+        'handlers': ['console'],
+        'level': 'WARNING',
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console'],
+            'level': os.getenv('DJANGO_LOG_LEVEL', 'INFO'),
+            'propagate': False,
+        },
+        'my_project.custom': {
+            'handlers': ['file'],
+            'level': os.getenv('DJANGO_LOG_LEVEL', 'ERROR'),
+            'formatters': ['verbose']
+        }
+}
+}
 
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
