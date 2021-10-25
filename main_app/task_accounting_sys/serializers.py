@@ -1,6 +1,5 @@
 import logging
 from rest_framework import serializers
-
 from .models import Task, User
 
 logger = logging.getLogger('info')

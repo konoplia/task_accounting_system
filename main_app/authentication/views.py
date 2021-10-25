@@ -1,4 +1,3 @@
-from django.shortcuts import render
 from rest_framework import status
 from rest_framework.generics import CreateAPIView, ListAPIView
 from rest_framework.permissions import AllowAny
@@ -11,18 +10,11 @@ from django.contrib.auth import get_user_model
 
 User = get_user_model()
 
-# Create your views here.
-
 
 class CustomUserView(ListAPIView, CreateAPIView):
 
     queryset = User.objects.all()
     serializer_class = CustomUserSerializer
-
-    # def get(self, request):
-    #     return Response ({User.objects.all()
-    # def get(self, request, *args, **kwargs):
-    #     return self.list(request, *args, **kwargs)
 
     def post(self, request):
         user_data = request.data
