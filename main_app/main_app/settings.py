@@ -35,10 +35,10 @@ LOGGING = {
             'filename': './logs/error.log',
         },
     },
-    'root': {
-        'handlers': ['console'],
-        'level': 'WARNING',
-    },
+    # 'root': {
+    #     'handlers': ['console'],
+    #     'level': 'WARNING',
+    # },
     'loggers': {
         'django': {
             'handlers': ['console'],
@@ -50,7 +50,8 @@ LOGGING = {
             'level': os.getenv('DJANGO_LOG_LEVEL', 'ERROR'),
             'formatters': ['verbose']
         }
-}
+    }
+
 }
 
 

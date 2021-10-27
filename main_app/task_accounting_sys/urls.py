@@ -6,9 +6,9 @@ from .views import TaskCreateView, TaskListView, TaskUpdateView, TaskDeleteView,
 app_name = "tasks"
 
 urlpatterns = [
-    path('tasks/bound/', BoundTasks.as_view()),
-    path('tasks/', TaskListView.as_view()),
-    path('tasks/create/', TaskCreateView.as_view()),
-    path('tasks/update/<int:pk>/', TaskUpdateView.as_view()),
-    path('tasks/delete/<int:pk>/', TaskDeleteView.as_view()),
+    path('', TaskListView.as_view(), name='list'),
+    path('bound/', BoundTasks.as_view(), name='bound_list'),
+    path('create/', TaskCreateView.as_view(), name='create'),
+    path('update/<int:pk>/', TaskUpdateView.as_view(), name='update'),
+    path('delete/<int:pk>/', TaskDeleteView.as_view(), name='delete'),
 ]

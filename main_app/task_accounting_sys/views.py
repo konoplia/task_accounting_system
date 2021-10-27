@@ -2,7 +2,7 @@ from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.generics import ListAPIView, CreateAPIView, RetrieveUpdateAPIView, DestroyAPIView
-from rest_framework import filters
+from rest_framework import filters, status
 
 from .models import Task
 from .serializers import TaskSerializer, TaskDeveloperSerializer, TaskManagerSerializer
@@ -13,20 +13,16 @@ from .permissions import IsOwner, IsManagersGroupMemberAndOwnerOrExecutor, IsMan
 class BoundTasks(ListAPIView):
 
     permission_classes = (IsAuthenticated,)
-    queryset = Task.objects.all()
     serializer_class = TaskSerializer
     filter_backends = [filters.OrderingFilter]
     ordering_fields = ['id', 'status', 'priority', 'create_date']
     ordering = ['id']
 
-    def filter_queryset(self, queryset):
+    def get_queryset(self):
         if self.request.user.groups.filter(name='Managers').exists():
             queryset = Task.objects.filter(created_by=self.request.user.id)
         else:
             queryset = Task.objects.filter(executor=self.request.user.id)
-
-        for backend in list(self.filter_backends):
-            queryset = backend().filter_queryset(self.request, queryset, self)
         return queryset
 
 
@@ -46,20 +42,19 @@ class TaskCreateView(CreateAPIView):
 
     def post(self, request):
         task = request.data
-        task['created_by'] = request.user.id
         serializer = TaskSerializer(data=task, context=request)
 
         if serializer.is_valid(raise_exception=True):
-            task_saved = serializer.save()
-            return Response({"success": "Task '{}' created successfully".format(task_saved.name)})
-        else:
-            return Response(serializer.errors)
+            task_saved = serializer.save(created_by=request.user)
+        return Response({"success": "Task '{}' created successfully".format(task_saved.name)},
+                        status=status.HTTP_201_CREATED)
 
 
 class TaskUpdateView(RetrieveUpdateAPIView):
 
+    queryset = Task.objects.all()
     serializer_class = TaskSerializer
-    permission_classes = (IsManagersGroupMemberAndOwnerOrExecutor,)
+    permission_classes = (IsAuthenticated, IsManagersGroupMemberAndOwnerOrExecutor,)
 
     def put(self, request, pk):
 
@@ -85,7 +80,7 @@ class TaskUpdateView(RetrieveUpdateAPIView):
 class TaskDeleteView(DestroyAPIView):
 
     serializer_class = TaskSerializer
-    permission_classes = (IsOwner, )
+    permission_classes = (IsAuthenticated, IsOwner, )
 
     def delete(self, request, pk):
         obj = Task.objects.get(id=pk)

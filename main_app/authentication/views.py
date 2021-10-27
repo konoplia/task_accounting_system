@@ -17,12 +17,11 @@ class CustomUserView(ListAPIView, CreateAPIView):
     serializer_class = CustomUserSerializer
 
     def post(self, request):
-        user_data = request.data
-        serializer = CustomUserSerializer(data=user_data)
+        serializer = CustomUserSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
             user_data_saved = serializer.save()
         return Response({"success": "User '{}' created successfully".format(
-            user_data_saved.username)})
+            user_data_saved.username)}, status=status.HTTP_201_CREATED)
 
 
 class BlacklistTokenUpdateView(APIView):

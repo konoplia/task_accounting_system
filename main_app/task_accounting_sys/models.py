@@ -28,8 +28,7 @@ class Task(models.Model):
     create_date = models.DateTimeField(auto_now_add=True)
     status = models.IntegerField(choices=STATUS_CHOICES, default=1)
     priority = models.IntegerField(choices=PRIORITY_CHOICES, default=1)
-    created_by = models.ForeignKey(User, on_delete=models.DO_NOTHING,
-                                   auto_created=True, related_name='manager')
+    created_by = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name='created_tasks', blank=True)
     executor = models.PositiveIntegerField(blank=True, null=True)
 
     def __str__(self):

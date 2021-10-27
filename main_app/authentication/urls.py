@@ -4,6 +4,6 @@ from .views import CustomUserView, BlacklistTokenUpdateView
 app_name = 'users'
 
 urlpatterns = [
-    path('create/', CustomUserView.as_view()),
+    path('register/', CustomUserView.as_view(), name='register'),
     path('logout/blacklist/', BlacklistTokenUpdateView.as_view())
 ]
