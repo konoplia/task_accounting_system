@@ -1,16 +1,11 @@
 from django.db import models
 from django.contrib.auth.models import User
 
-
-TO_DO = 1
-READY = 2
-IN_PROGRESS = 3
-COMPLETED = 4
 STATUS_CHOICES = (
-    (TO_DO, 'TO_DO'),
-    (READY, "READY"),
-    (IN_PROGRESS, 'IN_PROGRESS'),
-    (COMPLETED, 'COMPLETED')
+    (1, 'TO_DO'),
+    (2, 'READY'),
+    (3, 'IN_PROGRESS'),
+    (4, 'COMPLETED'),
 )
 
 PRIORITY_CHOICES = (
@@ -28,8 +23,8 @@ class Task(models.Model):
     create_date = models.DateTimeField(auto_now_add=True)
     status = models.IntegerField(choices=STATUS_CHOICES, default=1)
     priority = models.IntegerField(choices=PRIORITY_CHOICES, default=1)
-    created_by = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name='created_tasks', blank=True)
-    executor = models.PositiveIntegerField(blank=True, null=True)
+    created_by = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name='creator_tasks', null=True)
+    executor = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name='executor_tasks', null=True)
 
     def __str__(self):
         return self.name

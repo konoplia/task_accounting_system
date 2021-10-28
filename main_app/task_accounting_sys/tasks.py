@@ -6,8 +6,9 @@ from datetime import datetime
 
 @shared_task
 def delete_exp_task():
-    queryset = Task.objects.all()
+    queryset = Task.objects.filter(status=1)
     for obj in queryset:
-        if obj.create_date.replace(tzinfo=None) + timedelta(days=1) < \
-                datetime.now() and int(obj.status) == 1:
+        if obj.create_date.replace(tzinfo=None) + timedelta(days=1) < datetime.now():
             obj.delete()
+    # return len(queryset)
+

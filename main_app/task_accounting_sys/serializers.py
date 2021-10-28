@@ -20,12 +20,8 @@ class TaskSerializer(serializers.ModelSerializer):
         return data
 
     def validate_executor(self, value):
-        if value == self.context.user.id:
-            raise serializers.ValidationError("you cannot assign the task to yourself")
-        elif value > len(User.objects.all()):
-            raise serializers.ValidationError("this user not exist")
-        elif User.objects.get(id=value).groups.filter(name='Managers').exists():
-            raise serializers.ValidationError("You can not assign this task to manager")
+        if not User.objects.get(id=value.id).groups.filter(name='Developers').exists():
+            raise serializers.ValidationError("You can assign this task only to developer")
         return value
 
 
@@ -55,18 +51,14 @@ class TaskManagerSerializer(serializers.ModelSerializer):
             'executor'
         ]
 
-    def validate_executor(self, value):
-        if value == self.context:
-            raise serializers.ValidationError("you cannot assign the task to yourself")
-        elif value > len(User.objects.all()):
-            raise serializers.ValidationError("this user not exist")
-        elif User.objects.get(id=value).groups.filter(name='Managers').exists():
-            raise serializers.ValidationError("You can not assign this task to manager")
-        return value
-
     def validate(self, data):
         fields = [x for x in self.get_fields().keys()]
         for key in self.initial_data.keys():
             if key not in fields:
                 raise serializers.ValidationError(f'field "{key}" does not exist')
         return data
+
+    def validate_executor(self, value):
+        if not User.objects.get(id=value.id).groups.filter(name='Developers').exists():
+            raise serializers.ValidationError("You can assign this task only to developer")
+        return value

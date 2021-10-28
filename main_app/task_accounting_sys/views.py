@@ -64,8 +64,12 @@ class TaskUpdateView(RetrieveUpdateAPIView):
         data = request.data
         saved_task = get_object_or_404(Task.objects.all(), pk=pk)
 
+    # def get_serializer_class(self):
+    #     if self.request.user.groups.filter(name='Managers').exists():
+    #         return TaskManagerSerializer(instance=saved_task, data=data, context=request.user.id, partial=True)
+
         if request.user.groups.filter(name='Managers').exists():
-            serializer = TaskManagerSerializer(instance=saved_task, data=data, context=request.user.id, partial=True)
+            serializer = TaskManagerSerializer(instance=saved_task, data=data, context=request, partial=True)
         else:
             serializer = TaskDeveloperSerializer(instance=saved_task, data=data)
 
@@ -80,7 +84,7 @@ class TaskUpdateView(RetrieveUpdateAPIView):
 class TaskDeleteView(DestroyAPIView):
 
     serializer_class = TaskSerializer
-    permission_classes = (IsAuthenticated, IsOwner, )
+    permission_classes = (IsOwner, )
 
     def delete(self, request, pk):
         obj = Task.objects.get(id=pk)
