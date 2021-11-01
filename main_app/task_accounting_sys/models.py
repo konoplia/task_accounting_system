@@ -25,6 +25,7 @@ class Task(models.Model):
     priority = models.IntegerField(choices=PRIORITY_CHOICES, default=1)
     created_by = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name='creator_tasks', null=True)
     executor = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name='executor_tasks', null=True)
+    life_time = models.PositiveIntegerField(default=1)
 
     def __str__(self):
         return self.name

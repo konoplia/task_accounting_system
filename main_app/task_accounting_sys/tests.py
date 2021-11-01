@@ -6,6 +6,8 @@ from rest_framework import status
 from rest_framework.test import APITestCase
 from rest_framework_simplejwt.tokens import AccessToken
 
+from datetime import timedelta
+
 from .models import Task
 
 from .tasks import delete_exp_task
@@ -168,8 +170,9 @@ class TaskDeveloperGroupMemberTestCase(APITestCase):
         self.client.credentials(HTTP_AUTHORIZATION='Bearer ' + str(self.token))
 
         self.user = User.objects.create_user(username="example1", password="example@123")
-        self.task = Task.objects.create(created_by=self.user, name="test task", description="test description")
-        self.task1 = Task.objects.create(created_by=self.user, name="test task", description="test description", executor=self.developer)
+        self.task = Task.objects.create(created_by=self.user, name="test task1", description="test description1")
+        self.task1 = Task.objects.create(created_by=self.user, name="test task2", description="test description2", executor=self.developer)
+        self.task2 = Task.objects.create(created_by=self.user, name="test task3", description="test description3", executor=self.developer, status=2)
 
     def test_developer_list_task(self):
         response = self.client.get(reverse('tasks:list'))
@@ -207,8 +210,17 @@ class TaskDeveloperGroupMemberTestCase(APITestCase):
         response = self.client.delete(reverse('tasks:delete', args=(self.task.id,)))
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
-    # def test_delete_exp_task(self):
-    #     print(len(Task.objects.all()))
-    #     print(delete_exp_task('seconds', 2))
-    #     self.assertEqual(len(Task.objects.all()), delete_exp_task('seconds', 2))
 
+class TaskDeleteExpiredTask(APITestCase):
+    def setUp(self) -> None:
+        self.user = User.objects.create_user(username="example1", password="example@123")
+        self.old_task = Task.objects.create(
+            created_by=self.user,
+            name="test task3",
+            description="test description3",
+            life_time=5,
+        )
+        self.old_task.create_date = self.old_task.create_date - timedelta(days=self.old_task.life_time)
+
+    def test_delete_exp_task(self):
+        self.assertEqual(len(Task.objects.filter()), delete_exp_task())
