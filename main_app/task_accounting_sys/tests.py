@@ -214,6 +214,7 @@ class TaskDeveloperGroupMemberTestCase(APITestCase):
 class TaskDeleteExpiredTask(APITestCase):
     def setUp(self) -> None:
         self.user = User.objects.create_user(username="example1", password="example@123")
+        self.task = Task.objects.create(created_by=self.user, name="test task1", description="test description1", status=2)
         self.old_task = Task.objects.create(
             created_by=self.user,
             name="test task3",
@@ -223,4 +224,6 @@ class TaskDeleteExpiredTask(APITestCase):
         self.old_task.create_date = self.old_task.create_date - timedelta(days=self.old_task.life_time)
 
     def test_delete_exp_task(self):
-        self.assertEqual(len(Task.objects.filter()), delete_exp_task())
+        delete_exp_task()
+        self.assertEqual(len(Task.objects.filter(status=1)), 0)
+

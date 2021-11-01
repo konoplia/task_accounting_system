@@ -79,6 +79,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    'django_extensions',
+
     'rest_framework',
     'rest_framework_simplejwt.token_blacklist',
 
@@ -222,3 +224,9 @@ CELERY_RESULT_BACKEND = os.environ.get("CELERY_BROKER", "redis://redis:6379/0")
 
 
 FREQUENCY_START_FUNC = 1
+
+
+GRAPH_MODELS = {
+  'all_applications': True,
+  'group_models': True,
+}
