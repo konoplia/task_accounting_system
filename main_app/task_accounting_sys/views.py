@@ -53,7 +53,7 @@ class TaskCreateView(CreateAPIView):
 class TaskUpdateView(RetrieveUpdateAPIView):
 
     queryset = Task.objects.all()
-    serializer_class = TaskSerializer
+    # serializer_class = get_serializer_class()
     permission_classes = (IsAuthenticated, IsManagersGroupMemberAndOwnerOrExecutor,)
 
     def put(self, request, pk):
@@ -63,10 +63,6 @@ class TaskUpdateView(RetrieveUpdateAPIView):
 
         data = request.data
         saved_task = get_object_or_404(Task.objects.all(), pk=pk)
-
-    # def get_serializer_class(self):
-    #     if self.request.user.groups.filter(name='Managers').exists():
-    #         return TaskManagerSerializer(instance=saved_task, data=data, context=request.user.id, partial=True)
 
         if request.user.groups.filter(name='Managers').exists():
             serializer = TaskManagerSerializer(instance=saved_task, data=data, context=request, partial=True)
