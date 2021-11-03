@@ -16,6 +16,7 @@ djangorestframework-simplejwt==4.8.0
 kombu==5.1.0
 prompt-toolkit==3.0.20
 psycopg2-binary==2.8.6
+pydot==1.4.2
 PyJWT==2.1.0
 pyparsing==3.0.4
 python-crontab==2.5.1
@@ -28,3 +29,4 @@ sqlparse==0.4.2
 typing==3.7.4.3
 vine==5.0.0
 wcwidth==0.2.5
+

@@ -222,8 +222,11 @@ class TaskDeleteExpiredTask(APITestCase):
             life_time=5,
         )
         self.old_task.create_date = self.old_task.create_date - timedelta(days=self.old_task.life_time)
+        # self.old_task.create_date -= timedelta(days=self.old_task.life_time)
 
     def test_delete_exp_task(self):
+        print(Task.objects.all())
         delete_exp_task()
-        self.assertEqual(len(Task.objects.filter(status=1)), 0)
+        print(Task.objects.all())
+        self.assertEqual(len(Task.objects.all()), 1)
 

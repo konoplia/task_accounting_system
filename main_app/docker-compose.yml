@@ -34,7 +34,7 @@ services:
       - redis
   celery:
     build: .
-    command: celery -A main_app worker -l info
+    command: celery -A main_app worker --loglevel=INFO
     volumes:
       - .:/code
     depends_on:

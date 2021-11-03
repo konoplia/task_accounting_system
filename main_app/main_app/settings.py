@@ -12,9 +12,10 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 
 import os
 from datetime import timedelta
-# from django.contrib.auth.models import User
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+
+# os.environ["PATH"] += os.pathsep + 'C:/Program Files (x86)/Graphviz2.49.3/bin/dot'
 
 LOGGING = {
     'version': 1,
