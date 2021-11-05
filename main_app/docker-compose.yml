@@ -26,7 +26,7 @@ services:
       - db
   celery-beat:
     build: .
-    command: celery -A main_app beat
+    command: celery -A main_app beat --loglevel=INFO
     volumes:
       - .:/code
     depends_on:
@@ -34,7 +34,7 @@ services:
       - redis
   celery:
     build: .
-    command: celery -A main_app worker --loglevel=INFO
+    command: celery -A main_app worker -l info
     volumes:
       - .:/code
     depends_on:

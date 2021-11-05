@@ -1,3 +1,4 @@
+from django.core.exceptions import ObjectDoesNotExist
 from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -53,13 +54,17 @@ class TaskCreateView(CreateAPIView):
 class TaskUpdateView(RetrieveUpdateAPIView):
 
     queryset = Task.objects.all()
-    # serializer_class = get_serializer_class()
+    serializer_class = TaskSerializer
     permission_classes = (IsAuthenticated, IsManagersGroupMemberAndOwnerOrExecutor,)
 
     def put(self, request, pk):
-
-        obj = Task.objects.get(id=pk)
-        self.check_object_permissions(request, obj)
+        try:
+            obj = Task.objects.get(id=pk)
+            self.check_object_permissions(request, obj)
+        except ObjectDoesNotExist:
+            return Response({
+                "message": "Task with id `{}` does not exist.".format(pk)
+            }, status=status.HTTP_404_NOT_FOUND)
 
         data = request.data
         saved_task = get_object_or_404(Task.objects.all(), pk=pk)
@@ -83,11 +88,17 @@ class TaskDeleteView(DestroyAPIView):
     permission_classes = (IsOwner, )
 
     def delete(self, request, pk):
-        obj = Task.objects.get(id=pk)
-        self.check_object_permissions(request, obj)
+        try:
+            obj = Task.objects.get(id=pk)
+            self.check_object_permissions(request, obj)
+        except ObjectDoesNotExist as e:
+            return Response({
+                "message": "Task with id `{}` does not exist.".format(pk)
+            }, status=status.HTTP_404_NOT_FOUND)
 
         task = get_object_or_404(Task.objects.all(), pk=pk)
         task.delete()
         return Response({
             "message": "Task with id `{}` has been deleted.".format(pk)
-        }, status=204)
+        }, status=status.HTTP_205_RESET_CONTENT)
+

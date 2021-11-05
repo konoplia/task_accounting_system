@@ -13,10 +13,6 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 import os
 from datetime import timedelta
 
-# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-
-# os.environ["PATH"] += os.pathsep + 'C:/Program Files (x86)/Graphviz2.49.3/bin/dot'
-
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
@@ -36,10 +32,6 @@ LOGGING = {
             'filename': './logs/error.log',
         },
     },
-    # 'root': {
-    #     'handlers': ['console'],
-    #     'level': 'WARNING',
-    # },
     'loggers': {
         'django': {
             'handlers': ['console'],
@@ -163,7 +155,8 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+# TIME_ZONE = 'UTC'
+TIME_ZONE = "Europe/Kiev"
 
 USE_I18N = True
 
@@ -222,9 +215,11 @@ SIMPLE_JWT = {
 
 CELERY_BROKER_URL = os.environ.get("CELERY_BROKER", "redis://redis:6379/0")
 CELERY_RESULT_BACKEND = os.environ.get("CELERY_BROKER", "redis://redis:6379/0")
+CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
 
-
-FREQUENCY_START_FUNC = 1
+CELERY_TIMEZONE = "Europe/Kiev"
+CELERY_TASK_TRACK_STARTED = True
+CELERY_TASK_TIME_LIMIT = 30 * 60
 
 
 GRAPH_MODELS = {

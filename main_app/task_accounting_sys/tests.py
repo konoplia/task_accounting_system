@@ -1,6 +1,5 @@
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 from django.urls import reverse
-from django.contrib.auth.models import Group
 
 from rest_framework import status
 from rest_framework.test import APITestCase
@@ -142,8 +141,10 @@ class TaskManagerGroupMemberTestCase(APITestCase):
 
         response1 = self.client.put(reverse('tasks:update', args=(self.task_manager.id,)), data)
         response2 = self.client.put(reverse('tasks:update', args=(self.task_another_manager.id,)), data)
+        response3 = self.client.delete(reverse('tasks:delete', args=((Task.objects.last().id + 1),)))
         self.assertEqual(response1.status_code, status.HTTP_200_OK)
         self.assertEqual(response2.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response3.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_manager_update_task_with_wrong_field(self):
         data = {
@@ -156,8 +157,10 @@ class TaskManagerGroupMemberTestCase(APITestCase):
     def test_manager_delete_task(self):
         response = self.client.delete(reverse('tasks:delete', args=(self.task_manager.id,)))
         response1 = self.client.delete(reverse('tasks:delete', args=(self.task_another_manager.id,)))
-        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        response2 = self.client.delete(reverse('tasks:delete', args=((Task.objects.last().id+1),)))
+        self.assertEqual(response.status_code, status.HTTP_205_RESET_CONTENT)
         self.assertEqual(response1.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response2.status_code, status.HTTP_404_NOT_FOUND)
 
 
 class TaskDeveloperGroupMemberTestCase(APITestCase):
@@ -214,19 +217,17 @@ class TaskDeveloperGroupMemberTestCase(APITestCase):
 class TaskDeleteExpiredTask(APITestCase):
     def setUp(self) -> None:
         self.user = User.objects.create_user(username="example1", password="example@123")
-        self.task = Task.objects.create(created_by=self.user, name="test task1", description="test description1", status=2)
         self.old_task = Task.objects.create(
             created_by=self.user,
             name="test task3",
             description="test description3",
             life_time=5,
         )
-        self.old_task.create_date = self.old_task.create_date - timedelta(days=self.old_task.life_time)
-        # self.old_task.create_date -= timedelta(days=self.old_task.life_time)
+
+        self.old_task.create_date -= timedelta(days=self.old_task.life_time)
+        self.old_task.save()
+        delete_exp_task()
 
     def test_delete_exp_task(self):
-        print(Task.objects.all())
-        delete_exp_task()
-        print(Task.objects.all())
-        self.assertEqual(len(Task.objects.all()), 1)
+        self.assertEqual(len(Task.objects.all()), 0)
 
