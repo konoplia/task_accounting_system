@@ -13,8 +13,8 @@ app.autodiscover_tasks()
 app.conf.beat_schedule = {
     'check-every-hour': {
         'task': 'task_accounting_sys.tasks.delete_exp_task',
-        'schedule': crontab(hour=1),
+        'schedule': crontab(minute=0, hour='*/1'),
     },
 }
-app.conf.timezone = 'UTC'
+app.conf.timezone = "Europe/Kiev"
 
