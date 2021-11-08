@@ -48,7 +48,8 @@ class TaskManagerSerializer(serializers.ModelSerializer):
         fields = [
             'status',
             'description',
-            'executor'
+            'executor',
+            'life_time',
         ]
 
     def validate(self, data):
