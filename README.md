@@ -15,7 +15,7 @@ https://github.com/konoplia/task_accounting_system.git
 Docker must be installed on your computer to run the application.\
 How to install docker see here:
 https://docs.docker.com/\
-When docker is installed and the application is downloaded, go to the root directory of the project
+When docker is installed and the application is downloaded, go to the task_accounting_system/main_app
 ```bash
 .
 ├── Dockerfile
