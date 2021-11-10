@@ -136,7 +136,7 @@ class TaskManagerGroupMemberTestCase(APITestCase):
 
     def test_manager_update_task(self):
         data = {
-            "status": 2
+            "status": '2_READY'
         }
 
         response1 = self.client.put(reverse('tasks:update', args=(self.task_manager.id,)), data)
@@ -193,7 +193,7 @@ class TaskDeveloperGroupMemberTestCase(APITestCase):
 
     def test_developer_update_task(self):
         data = {
-            "status": 2
+            "status": '2_READY'
         }
         response = self.client.put(reverse('tasks:update', args=(self.task.id,)), data)
         response1 = self.client.put(reverse('tasks:update', args=(self.task1.id,)), data)
