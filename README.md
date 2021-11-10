@@ -77,11 +77,11 @@ Server response:
 "id":1,
 "name":"test task",
 "description":"test description",
-"create_date":"2021-11-08T18:07:43.444091+02:00",
-"status":1,
-"priority":1,
+"create_date":"2021-11-10T15:14:44.813336+02:00",
+"status":"1_TO_DO",
+"priority":"1_HIGH",
 "life_time":1,
-"created_by":7,
+"created_by":3,
 "executor":null
 }
 ```
