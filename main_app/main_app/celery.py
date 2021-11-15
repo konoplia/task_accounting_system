@@ -11,7 +11,7 @@ app.config_from_object('django.conf:settings', namespace='CELERY')
 app.autodiscover_tasks()
 
 app.conf.beat_schedule = {
-    'check-every-hour': {
+    'check-every-hour1': {
         'task': 'task_accounting_sys.tasks.delete_exp_task',
         'schedule': crontab(minute=0, hour='*/1'),
     },

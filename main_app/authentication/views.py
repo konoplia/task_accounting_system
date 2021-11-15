@@ -12,11 +12,13 @@ User = get_user_model()
 
 
 class CustomUserView(ListAPIView, CreateAPIView):
+    
 
     queryset = User.objects.all()
     serializer_class = CustomUserSerializer
 
     def post(self, request):
+        """'Takes a set of user credentials and returns 201 response if credentials is valid, and 400 if not valid"""
         serializer = CustomUserSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
             user_data_saved = serializer.save()
