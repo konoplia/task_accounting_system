@@ -21,7 +21,7 @@ from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from rest_framework_swagger.views import get_swagger_view
 from django.conf.urls import url
 
-schema_view = get_swagger_view(title='Pastebin API')
+schema_view = get_swagger_view(title='main_app API')
 
 
 
@@ -29,8 +29,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include('authentication.urls', namespace='authentication')),
     path('api/tasks/', include('task_accounting_sys.urls', namespace='tasks')),
-    path('api/token/', TokenObtainPairView.as_view()),
+    path('api/token/', TokenObtainPairView.as_view(), name='token'),
     path('api/token/refresh/', TokenRefreshView.as_view()),
+    url(r'^$', schema_view),
     # path('accounts/', include('django.contrib.auth.urls')),
-    url(r'^$', schema_view)
 ]

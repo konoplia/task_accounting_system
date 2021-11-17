@@ -2,7 +2,6 @@ from django.urls import path
 
 from .views import TaskCreateView, TaskListView, TaskUpdateView, TaskDeleteView, BoundTasks
 
-
 app_name = "tasks"
 
 urlpatterns = [

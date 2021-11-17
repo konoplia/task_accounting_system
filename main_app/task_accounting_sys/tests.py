@@ -49,7 +49,7 @@ class TaskAuthorizedUserTestCase(APITestCase):
         self.creator = User.objects.create_user(username="creator", password="example@123")
         self.user = User.objects.create_user(username="example", password="example@123")
         self.token = AccessToken.for_user(user=self.user)
-        self.client.credentials(HTTP_AUTHORIZATION='Bearer' + ' ' + str(self.token))
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer ' + str(self.token))
         self.task = Task.objects.create(created_by=self.creator, name="test task", description="test description")
 
     def test_authorized_list_task(self):

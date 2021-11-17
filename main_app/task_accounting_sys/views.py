@@ -11,6 +11,27 @@ from .serializers import TaskSerializer, TaskDeveloperSerializer, TaskManagerSer
 from .permissions import IsOwner, IsManagersGroupMemberAndOwnerOrExecutor, IsManagersGroupMember
 
 
+from rest_framework.permissions import AllowAny
+from rest_framework.schemas import SchemaGenerator
+from rest_framework.views import APIView
+from rest_framework_swagger import renderers
+
+
+
+class SwaggerSchemaView(APIView):
+    permission_classes = [AllowAny]
+    renderer_classes = [
+        renderers.OpenAPIRenderer,
+        renderers.SwaggerUIRenderer
+    ]
+
+    def get(self, request):
+        generator = SchemaGenerator()
+        schema = generator.get_schema(request=request)
+
+        return Response(schema)
+
+
 class BoundTasks(ListAPIView):
 
     permission_classes = (IsAuthenticated,)
@@ -55,7 +76,7 @@ class TaskUpdateView(RetrieveUpdateAPIView):
 
     queryset = Task.objects.all()
     serializer_class = TaskSerializer
-    permission_classes = (IsAuthenticated, IsManagersGroupMemberAndOwnerOrExecutor,)
+    permission_classes = (IsManagersGroupMemberAndOwnerOrExecutor,)
 
     def put(self, request, pk):
         try:
