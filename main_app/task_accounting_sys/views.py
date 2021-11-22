@@ -12,7 +12,9 @@ from .permissions import IsOwner, IsManagersGroupMemberAndOwnerOrExecutor, IsMan
 
 
 class BoundTasks(ListAPIView):
-
+    """
+    Returns a list of objects associated with the user.
+    """
     permission_classes = (IsAuthenticated,)
     serializer_class = TaskSerializer
     filter_backends = [filters.OrderingFilter]
@@ -28,6 +30,9 @@ class BoundTasks(ListAPIView):
 
 
 class TaskListView(ListAPIView):
+    """
+    Returns the entire list of objects.
+    """
 
     queryset = Task.objects.all()
     serializer_class = TaskSerializer
@@ -37,6 +42,9 @@ class TaskListView(ListAPIView):
 
 
 class TaskCreateView(CreateAPIView):
+    """
+    Accepts two required fields: name and description.
+    """
 
     serializer_class = TaskSerializer
     permission_classes = (IsManagersGroupMember, )
@@ -52,7 +60,9 @@ class TaskCreateView(CreateAPIView):
 
 
 class TaskUpdateView(RetrieveUpdateAPIView):
-
+    """
+    Accepts fields and their values ​​depending on access rights.
+    """
     queryset = Task.objects.all()
     serializer_class = TaskSerializer
     permission_classes = (IsAuthenticated, IsManagersGroupMemberAndOwnerOrExecutor,)
@@ -83,6 +93,9 @@ class TaskUpdateView(RetrieveUpdateAPIView):
 
 
 class TaskDeleteView(DestroyAPIView):
+    """
+    In case of successful deletion of the object, it returns 205 the server response.
+    """
 
     serializer_class = TaskSerializer
     permission_classes = (IsOwner, )
