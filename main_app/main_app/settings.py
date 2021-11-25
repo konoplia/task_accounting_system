@@ -225,3 +225,11 @@ GRAPH_MODELS = {
   'all_applications': True,
   'group_models': True,
 }
+
+# email settings
+
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'djangotest313@gmail.com'
+EMAIL_HOST_PASSWORD = 'django_test'
+EMAIL_USE_TLS = True
