@@ -34,6 +34,18 @@ services:
     depends_on:
       - web
       - redis
+  flower:  
+    build: .
+    command: celery -A main_app flower --loglevel=INFO
+    volumes:
+      - .:/code
+    ports:
+      - 5555:5555
+    environment:
+      CELERY_BROKER_URL: redis://redis
+      CELERY_RESULT_BACKEND: redis://redis 
+    depends_on:
+      - celery
   celery:
     build: .
     command: celery -A main_app worker -l info

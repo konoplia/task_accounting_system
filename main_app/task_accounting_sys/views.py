@@ -4,9 +4,10 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.generics import ListAPIView, CreateAPIView, RetrieveUpdateAPIView, DestroyAPIView
 from rest_framework import filters, status
-
 from .models import Task
 from .serializers import TaskSerializer, TaskDeveloperSerializer, TaskManagerSerializer
+from .tasks import send_mail_to_executor
+# from celery import de
 
 from .permissions import IsOwner, IsManagersGroupMemberAndOwnerOrExecutor, IsManagersGroupMember
 
@@ -55,6 +56,11 @@ class TaskCreateView(CreateAPIView):
 
         if serializer.is_valid(raise_exception=True):
             task_saved = serializer.save(created_by=request.user)
+
+        if task_saved.executor != None:
+            send_mail_to_executor.delay(task_saved.id)
+        
+
         return Response({"success": "Task '{}' created successfully".format(task_saved.name)},
                         status=status.HTTP_201_CREATED)
 
